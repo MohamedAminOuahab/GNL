@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: moouahab <moouahab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/16 03:18:06 by moouahab          #+#    #+#             */
-/*   Updated: 2023/11/18 19:12:46 by moouahab         ###   ########.fr       */
+/*   Created: 2023/11/18 18:26:32 by moouahab          #+#    #+#             */
+/*   Updated: 2023/11/18 19:01:22 by moouahab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 #ifndef BUFFER_SIZE
 # define BUFFER_SIZE 1024
@@ -22,7 +22,7 @@ char	*ft_strcpy_mall(char *str)
 	int	i;
 
 	if (!str || str == NULL)
-		return (free(str),(NULL));
+		return (NULL);
 	dest = malloc(sizeof(char) * (ft_strlen(str) + 1));
 	if (!dest)
 		return (dest);
@@ -43,7 +43,7 @@ char *ft_strjoin(char *s1, char *s2)
 	int	j;
 
 	if (!s1 || s1 == NULL)
-		return (free(s1), ft_strcpy_mall(s2));
+		return (ft_strcpy_mall(s2));
 	i = 0;
 	j = 0;
 	str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
@@ -67,28 +67,28 @@ char *ft_strjoin(char *s1, char *s2)
 
 char	*get_next_line(int fd)
 {
-	static char	*str;
+	static char	*str[1024];
 	char		*buff;
 	char		*line;
 	size_t		rtn_read;
-	
+
+	rtn_read = 1;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	rtn_read = 1;
 	buff = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buff)
 		return (NULL);
-	while (rtn_read && !ft_strchr(str, '\n'))
+	while (rtn_read && !ft_strchr(str[fd], '\n'))
 	{
 		rtn_read = read(fd, buff, BUFFER_SIZE);
 		if (rtn_read <= 0)
-			return (free(buff), free(str), (NULL));
+			return (free(buff), free(str[fd]), (NULL));
 		buff[rtn_read] = '\0';
-		str = ft_strjoin(str, buff);
+		str[fd] = ft_strjoin(str[fd], buff);
 	}
 	free(buff);
-	line = ft_res(str);
-	str = ft_delete(str);
+	line = ft_res(str[fd]);
+	str[fd] = ft_delete(str[fd]);
 	return (line);
 }
 
