@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: moouahab <moouahab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/16 03:18:06 by moouahab          #+#    #+#             */
-/*   Updated: 2023/11/16 05:28:06 by moouahab         ###   ########.fr       */
+/*   Created: 2023/11/18 10:20:24 by moouahab          #+#    #+#             */
+/*   Updated: 2023/11/18 14:34:49 by moouahab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,25 @@
 
 char	*get_next_line(int fd)
 {
-	static char	*str = NULL;
-	char		buff[BUFFER_SIZE];
+	static char	*stash = NULL;
+	char		buf[BUFFER_SIZE + 1];
 	char		*line;
-	size_t		rtn_read;
 
-	if (!str)
-		str = ft_strdup(" ");
-	while (!ft_strchr(str, '\n'))
+	line = NULL;
+	if (fd <= 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	if (!stash)
+		ft_memmove(stash, "", 0);
+	while (!ft_strchr(stash , '\n'))
 	{
-		rtn_read = read(fd, &buff, BUFFER_SIZE);
-		if (rtn_read == -1 || rtn_read == 0)
+		if (read(fd, buf, BUFFER_SIZE) < 0)
 		{
-			free(str);
+			free(stash);
 			return (NULL);
 		}
-		buff[rtn_read] = '\0';
-		str = ft_strjoin(str, buff);
+		stash = ft_strncat(stash, buf, BUFFER_SIZE);
 	}
-
+	ft_memmove(&line, &stash, BUFFER_SIZE);
+	line[ft_strlen(line)] = '\0';
 	return (line);
 }
