@@ -11,39 +11,57 @@
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <fcntl.h>
 #include "get_next_line.h"
+#include "bonus/get_next_line_bonus.h"
 
-// int	main(void)
-// {
-// 	char *str;
-// 	int			fd;
-// 	// size_t		g_index;
+ int	main(void)
+ {
+ 	char 		*str1;
+	char		*str2;
+ 	int		fd1;
+	int		fd2;
+	// size_t	g_index;
 
-// 	// g_index = 0;
-// 	fd = open("text.text", O_RDONLY);
-// 	if (fd == -1)
-// 	{
-// 		perror("Erreur lors de l'ouverture du fichier");
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	str = get_next_line(fd);
-// 	while (str)
-// 	{
-// 		printf("%s", str);
-// 		free(str);
-// 		str = get_next_line(fd);
-// 	}
-// 	free(str);
-// 	close(fd);
-// 	return (0);
-// }
+ 	// g_index = 0;
+	printf("================ fichier 1================\n");
+ 	fd1 = open("test.txt", O_RDONLY);
+ 	if (fd1 == -1)
+ 	{
+ 		perror("Erreur lors de l'ouverture du fichier");
+ 		exit(EXIT_FAILURE);
+ 	}
+ 	str1 = get_next_line(fd1);
+ 	while (str1)
+ 	{
+ 		printf("%s", str1);
+ 		free(str1);
+ 		str1 = get_next_line(fd1);
+ 	}
 
+	printf("\n================ fichier 2================\n");
+        fd2 = open("test2.txt", O_RDONLY);
+        if (fd2 == -1)
+        {
+                perror("Erreur lors de l'ouverture du fichier");
+                exit(EXIT_FAILURE);
+        }
+        str2 = get_next_line(fd2);
+        while (str2)
+        {
+                printf("%s", str2);
+                free(str2);
+                str2 = get_next_line(fd2);
+        }
 
+	free(str2);
+ 	free(str1);
+ 	close(fd1);
+	close(fd2);
+ 	return (0);
+ }
+
+/*
 int main() {
     int fd1 = open("file1.txt", O_RDONLY);
     int fd2 = open("file2.txt", O_RDONLY);
@@ -60,4 +78,4 @@ int main() {
         printf("%s", buffer);
         free(buffer);
     } while (buffer);
-}
+}*/
